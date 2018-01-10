@@ -1,3 +1,5 @@
+// insert instructions on how to use the command line inputs
+
 var fs = require("fs");
 
 var Twitter = require('twitter');
@@ -25,12 +27,10 @@ function mytweets() {
   		if (error) {
     		console.log(error)
   		} else {
-  			//console.log("looking at tweets.......................");
-  			//console.log(tweets);
 			for (var i = 0; i < tweets.length; i++) {
 				console.log(tweets[i].created_at)
 				console.log(tweets[i].text)
-			//make an if statement to break the loop, show only 20
+			//if statement to break the loop, show only 20 ?!?!
 			}
 		}
   	});
@@ -42,13 +42,31 @@ function spotifyThisSong(){
 	  if (err) {
 	    return console.log('Error occurred: ' + err);
 	  }
-	  //else if()
- console.log(data); 
 
- console.log(data.tracks.items);
- // console.log(name);
- // console.log(preview_url);
- // console.log(album.name)
+	  else {
+		var musicData = data.tracks.items;
+		// console.log(data)
+		// console.log(data.tracks);
+		// console.log(data.tracks.items);
+		// console.log(musicData[0].album.name);
+		// console.log(musicData[0].artists[0].name);
+		// console.log(musicData[0].name)
+		// console.log(data.tracks.total)
+
+			for (var i = 0; i<musicData.length; i++){
+				for (j=0; j<musicData[i].artists.length; j++){
+					    	    console.log("Artist: " + musicData[i].artists[j].name);
+					        	console.log("Track: " + musicData[i].name);
+					        	console.log("Preview URL: " + musicData[i].preview_url);
+					        	console.log("Album Name: " + musicData[i].album.name + "\n");
+				};
+			};
+		};
+
+	// if(	data.tracks.total === 0) {
+	//   	this.value === "The Sign"
+	//   }
+ // If no song is provided then your program will default to "The Sign" by Ace of Base
 	});
 };
 
@@ -69,20 +87,10 @@ function movieThis() {
 	console.log('Language: ' + info.Language);
 	console.log('Plot: ' + info.Plot);
 	console.log('Actors: ' + info.Actors);
-
-	
 	});
 
-
 	
-	   // * Title of the movie.(Title)
-    //    * Year the movie came out. (Year)
-    //    * IMDB Rating of the movie. (Rated)
-    //    * Rotten Tomatoes Rating of the movie. (Ratings.Source.Rotten Tomatoes)
-    //    * Country where the movie was produced. (Country)
-    //    * Language of the movie. (Language)
-    //    * Plot of the movie. (Plot)
-    //    * Actors in the movie. (Actors)
+//If the user doesn't type a movie in, the program will output data for the movie 'Mr. Nobody.'
 }
 
 switch (action) {
