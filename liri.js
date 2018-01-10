@@ -1,23 +1,18 @@
 var fs = require("fs");
 
 var Twitter = require('twitter');
-var config = require('./keys.js');
-var keys = config.twitterKeys;
-
 var Spotify = require('node-spotify-api');
-
 var request = require('request');
+
+var config = require('./keys.js');
+var twitterKeys = config.twitterKeys;
+var spotifyKeys = config.spotifyKeys;
 
 var action = process.argv[2];
 var value = process.argv[3];
 
-
-var client = new Twitter({
-  consumer_key: '3fRByQfBTWtBSsxQFPCEFi1p6',
-  consumer_secret: 'bRhe9OWA7XBWAJYqUF8CrAZh4sYlrGce4IETQlpk3tcUVbE9kZ',
-  access_token_key: '950825172847742978-g0zE7raq8g4lUI9AXG2UatzPWAtUCLj',
-  access_token_secret: 'TE8fsV1jjPwHStQ8w7H24lzQY0fQ7mzbn9war1BZStliZ'
-});
+var twitterClient = new Twitter(twitterKeys);
+var spotify = new Spotify(spotifyKeys);
 
 function mytweets() {
 
@@ -25,25 +20,23 @@ function mytweets() {
 				result_type: 'recent',
 				};
 
-		client.get('statuses/user_timeline', params, function(error, tweets, response) {
-	  		
-	  		if (error) {
-	    	console.log(error)
-	  		}
-	  		else {
-				for (var i = 0; i < 20; i++) {
-					console.log(tweets.text)
-				}
+	twitterClient.get('statuses/user_timeline', params, function(error, tweets, response) {
+  		
+  		if (error) {
+    		console.log(error)
+  		} else {
+  			//console.log("looking at tweets.......................");
+  			//console.log(tweets);
+			for (var i = 0; i < tweets.length; i++) {
+				console.log(tweets[i].created_at)
+				console.log(tweets[i].text)
+			//make an if statement to break the loop, show only 20
 			}
-	  	});
+		}
+  	});
 };
 
 function spotifyThisSong(){
-
-	var spotify = new Spotify({
-	  id: 'cf4a4a3539224794bf2eef8b5dd5c957',
-	  secret: 'b43933bc316344319fe81acd444efcac'
-	});
  
 	spotify.search({ type: 'track', query: value}, function(err, data) {
 	  if (err) {
@@ -51,10 +44,11 @@ function spotifyThisSong(){
 	  }
 	  //else if()
  console.log(data); 
- console.log(artists.name);
- console.log(name);
- console.log(preview_url);
- console.log(album.name)
+
+ console.log(data.tracks.items);
+ // console.log(name);
+ // console.log(preview_url);
+ // console.log(album.name)
 	});
 };
 
@@ -62,9 +56,20 @@ function spotifyThisSong(){
 function movieThis() {
 
 	request('https://www.omdbapi.com/?t=' + value + '&y=&plot=short&apikey=3384836', function (error, response, body) {
+	
 	console.log('error:', error); // Print the error if one occurred
 	console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-	console.log('body:', body); // Print the HTML for the ... homepage.
+	//console.log('body:', body); // Print the HTML for the ... homepage.
+	var info = JSON.parse(body);
+	console.log('Title: ' + info.Title);
+	console.log('Year: ' + info.Year);
+	console.log('IMDB Rating: ' + info.imdbRating);
+	console.log('Rotten Tomatoes Rating: ' + info.tomatoeRating);
+	console.log('Country: ' + info.Country);
+	console.log('Language: ' + info.Language);
+	console.log('Plot: ' + info.Plot);
+	console.log('Actors: ' + info.Actors);
+
 	
 	});
 
