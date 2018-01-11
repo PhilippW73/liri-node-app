@@ -10,6 +10,8 @@ var config = require('./keys.js');
 var twitterKeys = config.twitterKeys;
 var spotifyKeys = config.spotifyKeys;
 
+//var furtherPossibility = require('./random.txt');
+
 var action = process.argv[2];
 var value = process.argv[3];
 
@@ -20,6 +22,7 @@ function mytweets() {
 
 	var params = {screen_name: 'Merlin73GoaT',
 				result_type: 'recent',
+				count: 20,
 				};
 
 	twitterClient.get('statuses/user_timeline', params, function(error, tweets, response) {
@@ -43,7 +46,7 @@ function spotifyThisSong(){
 	    return console.log('Error occurred: ' + err);
 	  }
 
-	  else {
+	  
 		var musicData = data.tracks.items;
 		// console.log(data)
 		// console.log(data.tracks);
@@ -61,15 +64,9 @@ function spotifyThisSong(){
 					        	console.log("Album Name: " + musicData[i].album.name + "\n");
 				};
 			};
-		};
-
-	// if(	data.tracks.total === 0) {
-	//   	this.value === "The Sign"
-	//   }
+	  });
  // If no song is provided then your program will default to "The Sign" by Ace of Base
-	});
 };
-
 
 function movieThis() {
 
@@ -86,12 +83,39 @@ function movieThis() {
 	console.log('Country: ' + info.Country);
 	console.log('Language: ' + info.Language);
 	console.log('Plot: ' + info.Plot);
-	console.log('Actors: ' + info.Actors);
+	console.log('Actors: ' + info.Actors + "\n");
 	});
 
-	
 //If the user doesn't type a movie in, the program will output data for the movie 'Mr. Nobody.'
-}
+};
+
+function doWhatItSays(){
+// does not work at the moment.. work in progress
+	fs.readFile('./random.txt', "UTF-8", function read(err, data) {
+	    
+		var seperation = data.split(',')
+
+		console.log(seperation)
+		//[ 'spotify-this-song', '"I Want it That Way"' ]
+
+		var action = seperation[0];
+		var myJSON = JSON.stringify(action);
+		var value = seperation[1];
+
+		console.log(action);
+		console.log(value);
+
+		if(action === "spotify-this-song") {
+			spotifyThisSong();
+		}
+		else if(action === "my-tweets") {
+			mytweets();
+		}
+		else if(action === "movie-this") {
+			movieThis();
+		}
+	});
+};
 
 switch (action) {
   case "my-tweets":
@@ -110,12 +134,3 @@ switch (action) {
     doWhatItSays();
     break;
 }
-
-
-
-   // * `spotify-this-song`
-
-   // * `movie-this`
-
-   // * `do-what-it-says`
-
